@@ -3,9 +3,37 @@
 <head>
     <title>Social Network</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script>
+        // Функция для обработки отправки формы
+        function searchProfile(event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+            // Получаем значение из поля ввода
+            const usernameInput = document.getElementById("username");
+            const username = usernameInput.value.trim();
+
+            if (username === "") {
+                alert("Please enter a username.");
+                return;
+            }
+
+            // Перенаправляем на страницу профиля
+            window.location.href = "/profile/" + encodeURIComponent(username);
+        }
+    </script>
 </head>
 <body>
-<h1>Welcome to the Social Network</h1>
-<a href="/login">Login</a> | <a href="/register">Register</a>
+    <h1>Welcome to the Social Network</h1>
+
+    <!-- Форма поиска -->
+    <form onsubmit="searchProfile(event)">
+        <input type="text" id="username" placeholder="Enter username" required>
+        <button type="submit">Зайти</button>
+    </form>
+
+    <br>
+
+    <!-- Ссылки на регистрацию и вход -->
+    <a href="/login">Login</a> | <a href="/register">Register</a>
 </body>
 </html>
