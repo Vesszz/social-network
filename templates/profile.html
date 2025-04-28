@@ -12,7 +12,7 @@
     {{range .Posts}}
     <div class="post">
         <p>{{.Content}}</p>
-        <small>{{.Timestamp.Format "2006-01-02 15:04:05"}}</small>
+        <small>{{.CreatedAt.Format "2006-01-02 15:04:05"}}</small>
     </div>
     {{end}}
 </div>
