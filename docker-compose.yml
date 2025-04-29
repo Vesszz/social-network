@@ -14,7 +14,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: social_network
-      JWT_SECRET_KEY: change_me
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
 
   db:
     image: postgres:13
