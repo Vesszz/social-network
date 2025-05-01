@@ -24,5 +24,6 @@ jobs:
           script: |
             cd social-network
             git pull origin main
+            git reset --hard origin/main
             docker-compose down
             docker-compose up -d --build
