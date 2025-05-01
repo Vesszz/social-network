@@ -4,11 +4,8 @@
     <title>Social Network</title>
     <link rel="stylesheet" href="/static/style.css">
     <script>
-        // Функция для обработки отправки формы
         function searchProfile(event) {
-            event.preventDefault(); // Предотвращаем стандартное поведение формы
-
-            // Получаем значение из поля ввода
+            event.preventDefault();
             const usernameInput = document.getElementById("username");
             const username = usernameInput.value.trim();
 
@@ -17,7 +14,6 @@
                 return;
             }
 
-            // Перенаправляем на страницу профиля
             window.location.href = "/profile/" + encodeURIComponent(username);
         }
     </script>
@@ -35,5 +31,20 @@
 
     <!-- Ссылки на регистрацию и вход -->
     <a href="/login">Login</a> | <a href="/register">Register</a>
+
+    <h2>Latest Posts</h2>
+    <div class="posts">
+        {{if .}}
+        {{range .}}
+        <div class="post">
+            <h3><a href="/profile/{{.Author}}">{{.Author}}</a></h3>
+            <p>{{.Content}}</p>
+            <small>{{.CreatedAt.Format "2006-01-02 15:04:05"}}</small>
+        </div>
+        {{end}}
+        {{else}}
+        <p>No posts yet.</p>
+        {{end}}
+    </div>
 </body>
 </html>
