@@ -67,8 +67,8 @@ func main() {
 	http.HandleFunc("/profile/", profileHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	fmt.Println("Server started on :8080")
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Server started on :80")
+	http.ListenAndServe("0.0.0.0:80", nil)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
