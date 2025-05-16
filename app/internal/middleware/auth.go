@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"net/http"
-	"social-network/session"
+	"social-network/internal/session"
 )
 
-func authMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func Auth(next http.HandlerFunc) http.HandlerFunc {
     return func(w http.ResponseWriter, r * http.Request) {
         cookie, err := r.Cookie("token")
         if err != nil {
