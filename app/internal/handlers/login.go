@@ -1,6 +1,11 @@
 package handlers
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
+import (
+	"database/sql"
+	"social-network/internal/session"
+)
+
+func (h *Handler) login(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
@@ -21,7 +26,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 			return
 		}
-		token, err := generateJWT(username)
+		token, err := session.GenerateJWT(username)
 		if err != nil {
 			http.Error(w, "Failed to generate token", http.StatusInternalServerError)
 			return

@@ -26,7 +26,7 @@ func generateJWT(username string) (string, error) {
 }
 
 // Проверка JWT-токена
-func parseJWT(tokenString string) (string, error) {
+func ParseJWT(tokenString string) (string, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return getJWTKey(), nil
 	})

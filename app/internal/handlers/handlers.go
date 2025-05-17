@@ -10,16 +10,16 @@ type Handlers struct {
 	storage storage.Storage
 }
 
-func New() (*Handlers, error) {
+func New(storage storage.Storage) (*Handlers, error) {
 	return &Handlers{storage: storage}
 }
 
 func (h *Handlers) RegisterRoutes() {
-	http.HandleFunc("/", h.indexHandler)
-	http.HandleFunc("/register", h.registerHandler)
-	http.HandleFunc("/login", h.loginHandler)
-	http.HandleFunc("/post", middleware.Auth(h.postHandler))
-	http.HandleFunc("/feed", middleware.Auth(h.feedHandler))
-	http.HandleFunc("/profile/", h.profileHandler)
+	http.HandleFunc("/", h.index)
+	http.HandleFunc("/register", h.register)
+	http.HandleFunc("/login", h.login)
+	http.HandleFunc("/post", middleware.Auth(h.post))
+	http.HandleFunc("/feed", middleware.Auth(h.feed))
+	http.HandleFunc("/profile/", h.profile)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 }

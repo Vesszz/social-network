@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 	"social-network/internal/session"
 )
@@ -14,7 +15,7 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
         }
 
         tokenString := cookie.Value
-        username, err := parseJWT(tokenString)
+        username, err := session.ParseJWT(tokenString)
         if err != nil {
             http.Redirect(w, r, "/login", http.StatusFound)
             return

@@ -2,8 +2,6 @@ package storage
 
 import (
 	"database/sql"
-
-	_ "github/lib/pq"
 )
 
 type Storage struct {
@@ -16,4 +14,8 @@ func New(connStr string) (*Storage, error) {
 		return nil, err
 	}
 	return &Storage{db: db}, nil
+}
+
+func (s *Storage) Close() error {
+	return s.db.Close()
 }

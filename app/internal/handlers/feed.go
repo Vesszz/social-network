@@ -1,6 +1,6 @@
 package handlers
 
-func feedHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) feed(w http.ResponseWriter, r *http.Request) {
 	// Извлекаем имя пользователя из контекста
 	username := r.Context().Value("user").(string)
 

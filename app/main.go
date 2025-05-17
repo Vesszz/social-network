@@ -5,9 +5,6 @@ import (
 	"net/http"
 	"social-network/internal/config"
 	"social-network/internal/handlers"
-	"social-network/internal/middleware"
-	"social-network/internal/models"
-	"social-network/internal/session"
 	"social-network/internal/storage"
 )
 
@@ -20,8 +17,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("init storage: %w", err)
 	}
+	defer storage.Close(
 	handlers, err := handlers.New(storage)
 	if err != nil {
 		log.Fatalf("init handlers: %w", err)
 	}
+	handlers.RegisterRoutes()
 }

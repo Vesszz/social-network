@@ -13,8 +13,13 @@ type DBConfig struct {
 	Conn string
 }
 
+type JWTConfig struct {
+	Key string `env:"JWT_SECRET_KEY,required"`
+}
+
 type Config struct {
 	DB DBConfig
+	JWT JWTConfig
 }
 
 func initDBConfig() (DBConfig, error) {
@@ -34,12 +39,22 @@ func initDBConfig() (DBConfig, error) {
 	return dbCfg, nil
 }
 
+func initJWTConfig() (JWTConfig, error) {
+	var jwtCfg JWTConfig
+	if err := env.Parse(&jwtCfg); err != nil {
+		return JWTConfig{}, fmt.Errorf("parse from .env to struct: %w", err)
+	}
+	return jwtCfg, nil
+}
+
 func InitConfig() (*Config, error) {
 	dbCfg, err := initDBConfig()
 	if err != nil {
 		return nil, fmt.Errorf("init DB config: %w", err)
 	}
-	return &Config{
-		DB:  dbCfg
-	}, nil
+	jwtCfg, err := initJWTConfig()
+	if err != nil {
+		return nil, fmt.Errorf("init JWT config: %w", err)
+	}
+	return &Config{DB: dbCfg, JWT: jwtCfg}, nil
 }
