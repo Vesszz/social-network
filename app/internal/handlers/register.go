@@ -1,22 +1,23 @@
 package handlers
 
-func registerHandler(w http.ResponseWriter, r *http.Request) {
+import (
+	"golang.org/x/crypto/bcrypt"
+	"social-network/internal/storage"
+	"social-network/internal/models"
+)
+
+func (h *Handler) register(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
-		hashedPass, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-
-		_, err := db.Exec("INSERT INTO users (username, password_hash) VALUES ($1, $2)", username, string(hashedPass))
+		err := h.logic.Register(models.RegisterRequest{Username: username, Password: password})
 		if err != nil {
-			if strings.Contains(err.Error(), "unique") {
-				http.Error(w, "Username already exists", http.StatusBadRequest)
-				return
+			if strings.Contains(err.Error(), "username") {
+				http.Errorf("Username already taken", http.StatusBadRequest)
 			}
-			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
-
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
 		templates.ExecuteTemplate(w, "register.html", nil)

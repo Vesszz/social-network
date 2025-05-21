@@ -17,3 +17,9 @@ type Post struct {
 	AuthorID  int
 	CreatedAt time.Time
 }
+
+type JWTtoken struct {
+	ID int
+	Username string
+	Exp time.Time
+}

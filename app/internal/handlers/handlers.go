@@ -2,16 +2,16 @@ package handlers
 
 import (
 	"net/http"
-	"social-network/internal/storage"
+	"social-network/internal/logic"
 	"social-network/internal/middleware"
 )
 
 type Handlers struct {
-	storage storage.Storage
+	logic *logic.Logic
 }
 
-func New(storage storage.Storage) (*Handlers, error) {
-	return &Handlers{storage: storage}
+func New(l *logic.Logic) (*Handlers, error) {
+	return &Handlers{logic: l}
 }
 
 func (h *Handlers) RegisterRoutes() {

@@ -2,48 +2,48 @@ package session
 
 import (
 	"github.com/golang-jwt/jwt/v5"
-	"log"
-	"os"
+	"social-network/internal/models"
 	"time"
 )
 
-func getJWTKey() []byte {
-	jwtKey := os.Getenv("JWT_SECRET_KEY")
-	if jwtKey == "" {
-		log.Fatal("JWT_SECRET_KEY is not set in environment variables")
-	}
-	return []byte(jwtKey)
-}
-
-// Создание JWT-токена
-func generateJWT(username string) (string, error) {
+func (s *Session) GenerateJWT(jwttoken *models.JWTtoken) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(24 * time.Hour).Unix(), // Токен действителен 24 часа
+		"id": jwttoken.ID,
+		"username": jwttoken.Username,
+		"exp":      time.Now().Add(24 * time.Hour).Unix(),
 	})
 
-	return token.SignedString(getJWTKey())
+	return token.SignedString(s.JWTKey)
 }
 
-// Проверка JWT-токена
-func ParseJWT(tokenString string) (string, error) {
+func (s *Session) ParseJWT(tokenString string) (*models.JWTtoken, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return getJWTKey(), nil
+		return s.JWTKey, nil
 	})
 
 	if err != nil || !token.Valid {
-		return "", err
+		return nil, err
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return "", jwt.ErrInvalidKey
+		return nil, jwt.ErrInvalidKey
 	}
 
 	username, ok := claims["username"].(string)
 	if !ok {
-		return "", jwt.ErrInvalidKey
+		return nil, jwt.ErrInvalidKey
 	}
 
-	return username, nil
+	id, ok := claims["id"].(int)
+	if !ok {
+		return nil, jwt.ErrInvalidKey
+	}
+
+	exp, ok := claims["exp"].(time.Time)
+	if !ok {
+		return nil, jwt.ErrInvalidKey
+	}
+
+	return &models.JWTtoken{ID: id, Username: username, Exp: exp}, nil
 }
